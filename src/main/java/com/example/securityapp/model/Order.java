@@ -56,9 +56,9 @@ public class Order{
 
     @NotEmpty(message = "Longtitude can't be empty") @Min(0) @Max(360)
     @Column(name="longitude")
-    private Long longitude;
+    private Integer longitude;
 
     @NotEmpty(message = "Latitude can't be empty") @Min(0) @Max(360)
     @Column(name="latitude")
-    private Long latitude;
+    private Integer latitude;
 }
