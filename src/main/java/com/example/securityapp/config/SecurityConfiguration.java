@@ -23,11 +23,12 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/user/**").permitAll()
-                        .requestMatchers("/api/v1/message/**").permitAll()
-                        .requestMatchers("/api/v1/passReset/**").permitAll()
-                        .requestMatchers("/api/v1/order/**").permitAll()
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/api/v1/user/register").permitAll()
+                        .requestMatchers("/api/v1/user/login").permitAll()
+                        .requestMatchers("/api/v1/user/**").authenticated()
+                        .requestMatchers("/api/v1/message/**").authenticated()
+                        .requestMatchers("/api/v1/passReset/**").authenticated()
+                        .requestMatchers("/api/v1/order/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

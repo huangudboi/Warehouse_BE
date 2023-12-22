@@ -6,20 +6,20 @@ import com.example.securityapp.utils.ExcelGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -27,37 +27,59 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderController {
 
+    private Logger logger = Logger.getLogger(OrderController.class);
+
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/getAll")
+    @GetMapping("/getAllOrder")
     public ResponseEntity<List<Order>> findAllOrders() {
+        logger.info("=== Start call api get all orders ===");
         List<Order> orders = orderService.findAll();
-        if (orders.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        ResponseEntity<List<Order>> response;
+        try {
+            response = new ResponseEntity<>(orders, HttpStatus.OK);
+        }catch (IndexOutOfBoundsException ex) {
+            response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception ex){
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+        logger.info("=== End call api get all orders ===");
+        return response;
     }
-
-    private static final Logger logger = LoggerFactory
-            .getLogger(OrderController.class);
 
     @PostMapping(value = "/createOrder")
     public ResponseEntity<Order> createOrder(@RequestBody @Valid Order order, UriComponentsBuilder builder) {
-        orderService.save(order);
+        logger.info("=== Start call api create order ===");
+        ResponseEntity<Order> response;
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(builder.path("/{order_id}").buildAndExpand(order.getOrderId()).toUri());
-        return new ResponseEntity<>(order, HttpStatus.CREATED);
+        try {
+            orderService.save(order);
+            response = new ResponseEntity<>(order, HttpStatus.CREATED);
+        }catch (Exception ex){
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.info("=== End call api create order ===");
+        return response;
     }
 
     @DeleteMapping(value = "/deleteOrder/{order_id}")
     public ResponseEntity<Order> deleteOrder(@PathVariable("order_id") Long orderId) {
+        logger.info("=== Start call api delete order id: "+orderId+" ===");
         Optional<Order> order = orderService.findByOrderId(orderId);
-        if (!order.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        ResponseEntity<Order> response;
+        try {
+            orderService.remove(order.get());
+            response = new ResponseEntity<>(HttpStatus.OK);
+            Order actualOrder = order.orElseThrow(() -> new NoSuchElementException("Order with id:" +orderId+" don't found"));
+        }catch (NoSuchElementException ex) {
+            response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception ex){
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        orderService.remove(order.get());
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        logger.info("=== End call api delete order id: "+orderId+" ===");
+        return response;
     }
 
     @GetMapping("/export-to-excel")
@@ -74,5 +96,4 @@ public class OrderController {
         ExcelGenerator generator = new ExcelGenerator(listOfOrders);
         generator.generateExcelFile(response);
     }
-
 }
