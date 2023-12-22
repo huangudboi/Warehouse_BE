@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginDTO {
 
-    @Size(min=8, max=20)
+    @Size(min=8, max=20, message = "Username has from 8 to 20 characters")
     private String userName;
 
-    @Password
+    @Password(message = "Password is not in the correct format")
     private String password;
 
-    @NotNull
+    @NotNull(message = "Code cannot be null")
     private String code;
 }

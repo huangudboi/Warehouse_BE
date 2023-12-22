@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class UpdateUserDTO extends RegisterDTO{
 
-    @NotNull
+    @NotNull(message = "Need userId to identify user to update")
     private int userId;
 
 }

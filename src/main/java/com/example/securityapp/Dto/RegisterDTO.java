@@ -17,19 +17,19 @@ import java.util.Set;
 @NoArgsConstructor
 public class RegisterDTO {
 
-    @Size(min=8, max=30)
+    @Size(min=10, max=30, message = "Fullname has from 10 to 30 characters")
     private String fullName;
 
-    @Size(min=8, max=20)
+    @Size(min=8, max=20, message = "Username has from 8 to 20 characters")
     private String userName;
 
-    @NotEmpty
+    @NotEmpty(message = "Email can't be empty")
     @Email
     private String email;
 
-    @Password
+    @Password(message = "Password is not in the correct format")
     private String password;
 
-    @NotNull
+    @NotNull(message = "listRoles has not been entered")
     private Set<String> listRoles = new HashSet<>();
 }

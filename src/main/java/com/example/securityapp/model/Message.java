@@ -26,22 +26,21 @@ public class Message implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Size(min=8, max=20)
+    @Size(min=8, max=20, message = "Username has from 8 to 20 characters")
     @Column(name="username")
     private String userName;
 
-    @Password
+    @Password(message = "Password is not in the correct format")
     @Column(name="password")
     private String password;
 
-    @NotEmpty
+    @NotEmpty(message = "Message has not been entered")
     @Column(name="messages")
     private String messages;
 
     @Column(name="status")
     private Integer status;
 
-    @NotEmpty
     @Column(name="created_on")
     private String created_on;
 
