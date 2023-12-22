@@ -2,6 +2,8 @@ package com.example.securityapp.controller;
 
 import com.example.securityapp.model.Order;
 import com.example.securityapp.service.OrderService;
+import com.example.securityapp.utils.ExcelGenerator;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,6 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +58,21 @@ public class OrderController {
         }
         orderService.remove(order.get());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/export-to-excel")
+    public void exportIntoExcelFile(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=ListOrders-" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List <Order> listOfOrders = orderService.findAll();
+        ExcelGenerator generator = new ExcelGenerator(listOfOrders);
+        generator.generateExcelFile(response);
     }
 
 }

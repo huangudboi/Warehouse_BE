@@ -26,6 +26,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v1/user/**").permitAll()
                         .requestMatchers("/api/v1/message/**").permitAll()
                         .requestMatchers("/api/v1/passReset/**").permitAll()
+                        .requestMatchers("/api/v1/order/**").permitAll()
                         .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )

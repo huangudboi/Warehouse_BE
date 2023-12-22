@@ -64,6 +64,8 @@ dependencies {
     implementation 'org.eclipse.angus:jakarta.mail:1.1.0'
     implementation 'com.google.guava:guava:32.0.0-jre'
     implementation 'org.passay:passay:1.0'
+    implementation 'org.apache.poi:poi:5.1.0'
+    implementation 'org.apache.poi:poi-ooxml:5.1.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
