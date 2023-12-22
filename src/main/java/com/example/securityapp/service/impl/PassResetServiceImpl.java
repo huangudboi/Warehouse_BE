@@ -43,7 +43,7 @@ public class PassResetServiceImpl implements PassResetService {
     }
 
     @Override
-    public ResponseEntity<?> resetPassword(String userName) {
+    public ResponseEntity<ChangePassResponse> resetPassword(String userName) {
         if (userRepository.existsByUserName(userName)) {
             User user = userRepository.findByUserName(userName);
             String token = UUID.randomUUID().toString();
@@ -68,13 +68,13 @@ public class PassResetServiceImpl implements PassResetService {
             } catch (MessagingException exp){
                 exp.printStackTrace();
             }
-            return ResponseEntity.ok("Email sent! Please check your email");
+            return new ResponseEntity<>(new ChangePassResponse("Email sent! Please check your email"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ChangePassResponse("Email is not already"), HttpStatus.EXPECTATION_FAILED);
         }
     }
     @Override
-    public ResponseEntity<?> creatNewPass(String userName, String token, String newPassword) {
+    public ResponseEntity<ChangePassResponse> creatNewPass(String userName, String token, String newPassword) {
         if (userRepository.existsByUserName(userName)) {
             User user = userRepository.findByUserName(userName);
             PasswordResetToken passwordResetToken = getLastTokenByUserId(user.getUserId());

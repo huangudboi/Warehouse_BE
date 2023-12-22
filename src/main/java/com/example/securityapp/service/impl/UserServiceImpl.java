@@ -76,19 +76,16 @@ public class UserServiceImpl implements UserService {
             for(String role:strRoles){
                 switch (role) {
                     case "ADMIN":
-                        System.out.println("Có chức ADMIN");
                         Role adminRole = roleService.findByRoleName(ERole.ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
                         listRoles.add(adminRole);
                         continue;
                     case "MODERATOR":
-                        System.out.println("Có chức MODERATOR");
                         Role modRole = roleService.findByRoleName(ERole.MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
                         listRoles.add(modRole);
                         continue;
                     case "USER":
-                        System.out.println("Có chức USER");
                         Role userRole = roleService.findByRoleName(ERole.USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
                         listRoles.add(userRole);
@@ -119,7 +116,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthenticationResponse login(LoginDTO loginDTO) {
-        System.out.println(loginDTO);
         User user1 = userRepository.findByUserName(loginDTO.getUserName());
         if(user1 == null){
             return new AuthenticationResponse("Username not exits", false);
@@ -143,7 +139,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> updateUser(UpdateUserDTO updateUserDTO){
+    public ResponseEntity<String> updateUser(UpdateUserDTO updateUserDTO){
         User userChange = new User();
         User user = userRepository.findByUserId(updateUserDTO.getUserId());
         if (user != null) {
@@ -182,14 +178,14 @@ public class UserServiceImpl implements UserService {
             }
             userChange.setListRoles(listRoles);
         } else {
-            return new ResponseEntity<>(new ChangePassResponse("Can not find userID"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Can not find userID", HttpStatus.FORBIDDEN);
         }
         userRepository.save(userChange);
-        return ResponseEntity.ok(new ChangePassResponse("User update successfully"));
+        return ResponseEntity.ok("User update successfully");
     }
 
     @Override
-    public ResponseEntity<?> deleteUser(int userId){
+    public ResponseEntity<String> deleteUser(int userId){
         CustomUserDetails customUserDetail = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByUserId(userId);
         if (customUserDetail.getAuthorities().size()>user.getListRoles().size()){
@@ -199,7 +195,7 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("Delete successfully");
     }
     @Override
-    public ResponseEntity<?> updatePassword(ChangePasswordDTO changePasswordDTO){
+    public ResponseEntity<String> updatePassword(ChangePasswordDTO changePasswordDTO){
         User user = userRepository.findByUserName(changePasswordDTO.getUserName());
         if(user != null) {
             boolean check = passwordEncoder.matches(changePasswordDTO.getOldPass(), user.getPassword());

@@ -14,9 +14,9 @@ public interface UserService {
 
     AuthenticationResponse login(LoginDTO loginDTO);
 
-    ResponseEntity<?> updateUser(UpdateUserDTO updateUserDTO);
+    ResponseEntity<String> updateUser(UpdateUserDTO updateUserDTO);
 
-    ResponseEntity<?> deleteUser(int userId);
+    ResponseEntity<String> deleteUser(int userId);
 
-    ResponseEntity<?> updatePassword(ChangePasswordDTO changePasswordDTO);
+    ResponseEntity<String> updatePassword(ChangePasswordDTO changePasswordDTO);
 }
