@@ -7,17 +7,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -49,14 +44,12 @@ public class OrderController {
     }
 
     @PostMapping(value = "/createOrder")
-    public ResponseEntity<Order> createOrder(@RequestBody @Valid Order order, UriComponentsBuilder builder) {
+    public ResponseEntity<Order> createOrder(@RequestBody @Valid Order order) {
         logger.info("=== Start call api create order ===");
         ResponseEntity<Order> response;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(builder.path("/{order_id}").buildAndExpand(order.getOrderId()).toUri());
         try {
-            orderService.save(order);
-            response = new ResponseEntity<>(order, HttpStatus.CREATED);
+            Order oderSave= orderService.save(order);
+            response = new ResponseEntity<>(oderSave, HttpStatus.CREATED);
         }catch (Exception ex){
             response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -83,17 +76,14 @@ public class OrderController {
     }
 
     @GetMapping("/export-to-excel")
-    public void exportIntoExcelFile(HttpServletResponse response) throws IOException {
-        response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=ListOrders-" + currentDateTime + ".xlsx";
-        response.setHeader(headerKey, headerValue);
-
+    public void exportIntoExcelFile(HttpServletResponse response){
+        logger.info("=== Export excel file ===");
         List <Order> listOfOrders = orderService.findAll();
-        ExcelGenerator generator = new ExcelGenerator(listOfOrders);
-        generator.generateExcelFile(response);
+        try {
+            ExcelGenerator generator = new ExcelGenerator(listOfOrders);
+            generator.generateExcelFile(response);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
     }
 }

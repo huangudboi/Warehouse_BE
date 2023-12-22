@@ -20,7 +20,8 @@ public class DemoController {
         logger.info("=== Start call api test token ===");
         ResponseEntity<String> response;
         try {
-            response = ResponseEntity.ok("Test token");
+//            response = ResponseEntity.ok("Test token");
+            response = new ResponseEntity<>("Test token", HttpStatus.OK);
         }catch (JwtException ex){
             response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }catch (Exception ex){

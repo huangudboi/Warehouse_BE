@@ -65,8 +65,8 @@ public class PassResetServiceImpl implements PassResetService {
                         "Token chỉ có hiệu lực trong 5 phút, vui lòng thay đổi mật khẩu của bạn ngay.");
                 dataMail.setProps(props);
                 mailService.sendHtmlMail(dataMail, Const.TEMPLATE_FILE_NAME.CLIENT_REGISTER);
-            } catch (MessagingException exp){
-                exp.printStackTrace();
+            } catch (MessagingException ex){
+                ex.printStackTrace();
             }
             return new ResponseEntity<>(new ChangePassResponse("Email sent! Please check your email"), HttpStatus.OK);
         } else {
@@ -81,18 +81,18 @@ public class PassResetServiceImpl implements PassResetService {
             long date1 = passwordResetToken.getStartDate().getTime() + 1800000;
             long date2 = new Date().getTime();
             if (date2 > date1) {
-                return new ResponseEntity<>(new ChangePassResponse("Expired Token "), HttpStatus.EXPECTATION_FAILED);
+                return new ResponseEntity<>(new ChangePassResponse("Expired Token"), HttpStatus.EXPECTATION_FAILED);
             } else {
                 if (passwordResetToken.getToken().equals(token)) {
                     user.setPassword(passwordEncoder.encode(newPassword));
                     userRepository.save(user);
-                    return new ResponseEntity<>(new ChangePassResponse("Update password successfully "), HttpStatus.OK);
+                    return new ResponseEntity<>(new ChangePassResponse("Update password successfully"), HttpStatus.OK);
                 } else {
-                    return new ResponseEntity<>(new ChangePassResponse("Token is fail "), HttpStatus.NO_CONTENT);
+                    return new ResponseEntity<>(new ChangePassResponse("Token is fail"), HttpStatus.NO_CONTENT);
                 }
             }
         }else{
-            return new ResponseEntity<>(new ChangePassResponse("UserName not found "), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ChangePassResponse("UserName not found"), HttpStatus.NO_CONTENT);
         }
     }
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface OrderService {
 
     List<Order> findAll();
-    void save(Order order);
+    Order save(Order order);
     void remove(Order order);
     Optional<Order> findByOrderId(Long orderId);
 

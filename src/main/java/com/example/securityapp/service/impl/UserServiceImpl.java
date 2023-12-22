@@ -106,8 +106,8 @@ public class UserServiceImpl implements UserService {
             props.put("code", "Mã code đăng nhập hệ thống của bạn là:"+ codenumber);
             dataMail.setProps(props);
             mailService.sendHtmlMail(dataMail, Const.TEMPLATE_FILE_NAME.CLIENT_REGISTER);
-        } catch (MessagingException exp){
-            exp.printStackTrace();
+        } catch (MessagingException ex){
+            ex.printStackTrace();
         }
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUserName());
         var jwtToken = jwtService.generateToken(userDetails);
