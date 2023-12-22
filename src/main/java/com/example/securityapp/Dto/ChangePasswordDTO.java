@@ -1,6 +1,8 @@
 package com.example.securityapp.Dto;
 
 
+import com.example.securityapp.validator.Password;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChangePasswordDTO {
+
+    @Size(min=8, max=20, message = "Username has from 8 to 20 characters")
     private String userName;
+
+    @Password(message = "Password is not in the correct format")
     private String oldPass;
+
+    @Password(message = "Password is not in the correct format")
     private String newPass;
 }

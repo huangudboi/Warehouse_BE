@@ -20,14 +20,19 @@ public class User {
     @Column(name="user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
+
     @Column(name="full_name", length = 255)
     private String fullName;
+
     @Column(name="user_name", length = 255)
     private String userName;
+
     @Column(name="email", length = 255)
     private String email;
+
     @Column(name="password", length = 255)
     private String password;
+
     @Column(name="code", length = 255)
     private String code;
 
