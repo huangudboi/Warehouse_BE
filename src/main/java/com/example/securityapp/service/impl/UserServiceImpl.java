@@ -1,7 +1,6 @@
 package com.example.securityapp.service.impl;
 
 import com.example.securityapp.Dto.*;
-import com.example.securityapp.Dto.response.ChangePassResponse;
 import com.example.securityapp.config.JwtService;
 import com.example.securityapp.Dto.response.AuthenticationResponse;
 import com.example.securityapp.model.ERole;
