@@ -1,5 +1,9 @@
 package com.example.securityapp.utils;
+
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.example.securityapp.model.Order;
@@ -78,7 +82,9 @@ public class ExcelGenerator {
             createCell(row, columnCount++, record.getLatitude(), style);
         }
     }
+
     public void generateExcelFile(HttpServletResponse response) throws IOException {
+        configResponse(response);
         writeHeader();
         write();
         ServletOutputStream outputStream = response.getOutputStream();
@@ -86,4 +92,15 @@ public class ExcelGenerator {
         workbook.close();
         outputStream.close();
     }
+
+    private void configResponse(HttpServletResponse response){
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=ListOrders-" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+    }
+
 }

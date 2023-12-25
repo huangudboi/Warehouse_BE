@@ -3,7 +3,8 @@ package com.example.securityapp.controller;
 import com.example.securityapp.model.Message;
 import com.example.securityapp.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MessageController {
 
-    private Logger logger = Logger.getLogger(MessageController.class);
+    private static final Logger logger = LogManager.getLogger(MessageController.class);
 
     @Autowired
     private MessageService messageService;
