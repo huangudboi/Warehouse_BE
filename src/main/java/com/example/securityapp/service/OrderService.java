@@ -12,5 +12,6 @@ public interface OrderService {
     Order save(Order order);
     void remove(Order order);
     Optional<Order> findByOrderId(Long orderId);
+    int countTodo();
 
 }

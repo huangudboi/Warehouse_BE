@@ -1,11 +1,15 @@
 package com.example.securityapp.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Role")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +19,8 @@ public class Role {
     @Column(name = "RoleName")
     @Enumerated(EnumType.STRING)
     private ERole roleName;
+
+    public Role(ERole roleName) {
+        this.roleName = roleName;
+    }
 }

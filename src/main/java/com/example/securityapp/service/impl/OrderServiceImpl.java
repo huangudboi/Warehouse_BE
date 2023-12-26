@@ -36,4 +36,9 @@ public class OrderServiceImpl implements OrderService {
     public Optional<Order> findByOrderId(Long orderId) {
         return orderRepository.findByOrderId(orderId);
     }
+
+    @Autowired
+    public int countTodo(){
+        return orderRepository.findAll().size();
+    }
 }

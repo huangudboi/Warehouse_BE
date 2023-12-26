@@ -5,6 +5,8 @@ import com.example.securityapp.Dto.LoginDTO;
 import com.example.securityapp.Dto.RegisterDTO;
 import com.example.securityapp.Dto.UpdateUserDTO;
 import com.example.securityapp.Dto.response.AuthenticationResponse;
+import com.example.securityapp.model.Message;
+import com.example.securityapp.model.User;
 import com.example.securityapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/user")
@@ -88,6 +92,22 @@ public class UserController {
         }catch (Exception ex){
             response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return response;
+    }
+
+    @GetMapping("/getAllUser")
+    public ResponseEntity<List<User>> findAllUser() {
+        logger.info("=== Start call api get all users ===");
+        List<User> users = userService.findAll();
+        ResponseEntity<List<User>> response;
+        try {
+            response = new ResponseEntity<>(users, HttpStatus.OK);
+        }catch (IndexOutOfBoundsException ex) {
+            response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception ex){
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.info("=== End call api get all users ===");
         return response;
     }
 
