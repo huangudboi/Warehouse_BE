@@ -61,4 +61,17 @@ public class Order{
     @NotEmpty(message = "Latitude can't be empty") @Min(0) @Max(360)
     @Column(name="latitude")
     private Integer latitude;
+
+    public Order(String nameSender, String phoneSender, String addressSender, String emailSender, String nameReceiver, String phoneReceiver, String addressReceiver, String emailReceiver, Integer longitude, Integer latitude) {
+        this.nameSender = nameSender;
+        this.phoneSender = phoneSender;
+        this.addressSender = addressSender;
+        this.emailSender = emailSender;
+        this.nameReceiver = nameReceiver;
+        this.phoneReceiver = phoneReceiver;
+        this.addressReceiver = addressReceiver;
+        this.emailReceiver = emailReceiver;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
 }

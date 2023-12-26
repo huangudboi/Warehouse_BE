@@ -1,7 +1,7 @@
 package com.example.securityapp.service.impl;
 
 import com.example.securityapp.Dto.*;
-import com.example.securityapp.config.JwtService;
+import com.example.securityapp.security.JwtService;
 import com.example.securityapp.Dto.response.AuthenticationResponse;
 import com.example.securityapp.model.ERole;
 import com.example.securityapp.model.Role;
@@ -208,5 +208,23 @@ public class UserServiceImpl implements UserService {
         }else {
             return new ResponseEntity<>("userId not exits", HttpStatus.EXPECTATION_FAILED);
         }
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User findByUserId(int userId) {
+        return userRepository.findByUserId(userId);
+    }
+
+    @Override
+    public boolean exists(User user) {
+        if(userRepository.existsByUserName(user.getUserName())){
+            return true;
+        }
+        return false;
     }
 }

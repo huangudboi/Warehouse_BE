@@ -28,7 +28,7 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping("/getAllMessage")
-    public ResponseEntity<List<Message>> findALlMessage() {
+    public ResponseEntity<List<Message>> findAllMessage() {
         logger.info("=== Start call api get all messages ===");
         List<Message> messages = messageService.findAll();
         ResponseEntity<List<Message>> response;
